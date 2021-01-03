@@ -1,5 +1,5 @@
 import React, { useState , useEffect} from 'react';
-import { TouchableOpacity, ImageBackground, Pressable ,StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity, ImageBackground ,StyleSheet, Text, View } from 'react-native';
 
 export default  App = () => {
   const [showHomeScreen, setShowHomeScreen] = useState(true)
@@ -56,14 +56,18 @@ export default  App = () => {
   
   const Play = () => {
     const [color, setColor] = useState({color0:"red",color1:"green",color2:"blue",color3:"yellow"})
-    const [level, setLevel] = useState(0)
-    const [nameButton, setNameButton] = useState("start")
+    const [level, setLevel] = useState(1)
+    const [list, setList] = useState([])
+    const [resetButton, setResetButton] = useState(false)
     
     const defaultColor = () => {
       setColor({color0:"red",color1:"green",color2:"blue",color3:"yellow"})
     }
 
-    const buttonLevelStart = () => {level<=0? (setNameButton("start")):(setNameButton("level "+level))}
+    const unClearColor = () => {
+      setColor({color0:"#FFBDBD",color1:"#C5FFA9",color2:"#B0DFFF",color3:"#F6FFB7"})
+    }
+
     const colorSelected = (num = 4) => {
         switch (num) {
         case 0:setColor({color0:"#FFBDBD",color1:"green",color2:"blue",color3:"yellow"});break;
@@ -73,32 +77,43 @@ export default  App = () => {
         default:console.log("default");break;}
     }
 
-    const handleClickRestart = () => {
+    const Reset = () => {
+      if (resetButton){ return (
+        <TouchableOpacity style={{width:"20%",backgroundColor:"red",borderRadius: 40,left:"2%",top:"2%",height:"45%",top:"5%"}} >
+        <Text style={[styles.textButton,{fontSize: 18}]}>reset</Text>
+        </TouchableOpacity>
+      )}else{return (<View></View>)}
+    }
+
+    const handleClickReset = () => {
       setLevel(1)
     }  
 
+    const handleClickStart = () => {
+      unClearColor()
+
+    }
+    
     //   console.log(colorName)
     // setColor({color0:"#FFBDBD",color1:"#C5FFA9",color2:"#B0DFFF",color3:"#F6FFB7"})
     
   return (
   <View > 
     <ImageBackground style={{width:"100%",height:"100%"}} source={require("./assets/screen.png")} >
-            <View style={{flex:1,flexDirection:'row',top:"8%"}}>
+            <View style={{flex:1.5,flexDirection:'row',top:"8%"}}>
             <TouchableOpacity style={{flex:1,width:"20%",backgroundColor:"#092BC6",borderRadius: 40,height:"45%"}} onPress={handleClickReturn}>
-            <Text style={[styles.textButton,{fontSize: 18}]}>return</Text>
+              <Text style={[styles.textButton,{fontSize: 18}]}>return</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{flex:1,width:"20%",backgroundColor:"#092BC6",borderRadius: 40,height:"45%"}} >
-            <Text style={[styles.textButton,{fontSize: 18}]}>Restart</Text>
-            </TouchableOpacity>
-            </View>
-            <View style={{flex:2}}>
-            <TouchableOpacity style={[styles.buttons,{height:"23%"}]} onPress={handleClickRestart}>
-              <Text style={[styles.textButton,{fontSize: 18}]}>{nameButton}</Text>
+           <TouchableOpacity style={{flex:1,width:"20%",backgroundColor:"#092BC6",borderRadius: 40,height:"45%"}} onPress={handleClickStart}>
+              <Text style={[styles.textButton,{fontSize: 18}]}>start level {level}</Text>
           </TouchableOpacity>
-            </View>
+            </View> 
             <View style={{flex:3}}>
               <TouchableOpacity  style={{flex:1,flexDirection:'row'}}><TouchableOpacity  style={{flex:1,backgroundColor: color.color0}} onPress={() =>colorSelected(0)}></TouchableOpacity ><TouchableOpacity  style={{flex:1,backgroundColor: color.color1}} onPress={() =>colorSelected(1)}></TouchableOpacity ></TouchableOpacity >
               <TouchableOpacity  style={{flex:1,flexDirection:'row'}}><TouchableOpacity  style={{flex:1,backgroundColor: color.color2}} onPress={() =>colorSelected(2)}></TouchableOpacity ><TouchableOpacity  style={{flex:1,backgroundColor: color.color3}} onPress={() =>colorSelected(3)}></TouchableOpacity></TouchableOpacity >
+            </View>
+            <View style={{flex:1.5}}>
+            <Reset />
             </View>
             </ImageBackground>
   </View>
