@@ -66,13 +66,11 @@ export default  App = () => {
           return Math.floor(Math.random() * Math.floor(4))
       }
       function addNewColor() {
-        console.log("before add random color "+list.length)
         setList([...list,getRandomInt()])
         
           return 0
       }
           addNewColor()
-          console.log("after add random color "+list.length)
       }
 
     const defaultColor = () => {
