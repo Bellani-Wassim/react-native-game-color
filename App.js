@@ -60,6 +60,21 @@ export default  App = () => {
     const [list, setList] = useState([])
     const [resetButton, setResetButton] = useState(false)
     
+    const  addRandomColor = (indx) => {
+    
+      function getRandomInt() {
+          return Math.floor(Math.random() * Math.floor(4))
+      }
+      function addNewColor() {
+        console.log("before add random color "+list.length)
+        setList([...list,getRandomInt()])
+        
+          return 0
+      }
+          addNewColor()
+          console.log("after add random color "+list.length)
+      }
+
     const defaultColor = () => {
       setColor({color0:"red",color1:"green",color2:"blue",color3:"yellow"})
     }
@@ -69,12 +84,12 @@ export default  App = () => {
     }
 
     const colorSelected = (num = 4) => {
-        switch (num) {
-        case 0:setColor({color0:"#FFBDBD",color1:"green",color2:"blue",color3:"yellow"});break;
-        case 1:setColor({color0:"red",color1:"#C5FFA9",color2:"blue",color3:"yellow"});break;
-        case 2:setColor({color0:"red",color1:"green",color2:"#B0DFFF",color3:"yellow"});break;
-        case 3:setColor({color0:"red",color1:"green",color2:"blue",color3:"#F6FFB7"});break;
-        default:console.log("default");break;}
+        // switch (num) {
+        // case 0:setColor({color0:"#FFBDBD",color1:"green",color2:"blue",color3:"yellow"});break;
+        // case 1:setColor({color0:"red",color1:"#C5FFA9",color2:"blue",color3:"yellow"});break;
+        // case 2:setColor({color0:"red",color1:"green",color2:"#B0DFFF",color3:"yellow"});break;
+        // case 3:setColor({color0:"red",color1:"green",color2:"blue",color3:"#F6FFB7"});break;
+        // default:console.log("default");break;}
     }
 
     const Reset = () => {
@@ -89,8 +104,12 @@ export default  App = () => {
       setLevel(1)
     }  
 
+
+
     const handleClickStart = () => {
+      setResetButton(true)
       unClearColor()
+      addRandomColor()
 
     }
     
