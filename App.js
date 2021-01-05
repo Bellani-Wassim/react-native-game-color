@@ -21,7 +21,7 @@ export default  App = () => {
   }
 
   const randomColorAdd = () => {
-
+ 
   }
 
   const handleClickColor = () => {
@@ -57,20 +57,16 @@ export default  App = () => {
   const Play = () => {
     const [color, setColor] = useState({color0:"red",color1:"green",color2:"blue",color3:"yellow"})
     const [level, setLevel] = useState(1)
+    const [time, setTime] = useState(0)
+    const [tompo, setTompo] = useState(0)
     const [list, setList] = useState([])
     const [resetButton, setResetButton] = useState(false)
     
-    const  addRandomColor = (indx) => {
-    
-      function getRandomInt() {
-          return Math.floor(Math.random() * Math.floor(4))
-      }
-      function addNewColor() {
-        setList([...list,getRandomInt()])
-        
+    const addNewColor=()=> {
+        setList(list =>[ ...list, Math.floor(Math.random() * 4)])
+        console.log('taille list dans le add random = '+list.length)
+        console.log('lelement numero 1: '+list[0])
           return 0
-      }
-          addNewColor()
       }
 
     const defaultColor = () => {
@@ -79,15 +75,6 @@ export default  App = () => {
 
     const unClearColor = () => {
       setColor({color0:"#FFBDBD",color1:"#C5FFA9",color2:"#B0DFFF",color3:"#F6FFB7"})
-    }
-
-    const colorSelected = (num = 4) => {
-        // switch (num) {
-        // case 0:setColor({color0:"#FFBDBD",color1:"green",color2:"blue",color3:"yellow"});break;
-        // case 1:setColor({color0:"red",color1:"#C5FFA9",color2:"blue",color3:"yellow"});break;
-        // case 2:setColor({color0:"red",color1:"green",color2:"#B0DFFF",color3:"yellow"});break;
-        // case 3:setColor({color0:"red",color1:"green",color2:"blue",color3:"#F6FFB7"});break;
-        // default:console.log("default");break;}
     }
 
     const Reset = () => {
@@ -102,17 +89,32 @@ export default  App = () => {
       setLevel(1)
     }  
 
-
+    const colorDisplay = (num=4) => {
+              switch (num) {
+        case 0:setColor({color0:"red",color1:"#C5FFA9",color2:"#B0DFFF",color3:"#F6FFB7"});break;
+        case 1:setColor({color0:"#FFBDBD",color1:"green",color2:"#B0DFFF",color3:"#F6FFB7"});break;
+        case 2:setColor({color0:"#FFBDBD",color1:"#C5FFA9",color2:"blue",color3:"#F6FFB7"});break;
+        case 3:setColor({color0:"#FFBDBD",color1:"#C5FFA9",color2:"#B0DFFF",color3:"yellow"});break;
+        default:console.log("default");break;}
+    }
 
     const handleClickStart = () => {
       setResetButton(true)
       unClearColor()
-      addRandomColor()
+      addNewColor()
+      colorDisplay(list[0])
+      console.log('taille list apres 1 er add random = '+list.length)
+      // useEffect(() => {
+      //   for (let i = 0; i < list.length; i++) { 
+      //     console.log('lelement numero'+i+': '+list[i])
+      //     // setTime(t => t + 500) 
+      //     setTimeout(() => {colorDisplay(list[i])}, 500)
+      //     // setTime(t => t + 140)
+      //     setTimeout(() => {unClearColor()}, 750)
+      //   }
+      // }, [])
 
     }
-    
-    //   console.log(colorName)
-    // setColor({color0:"#FFBDBD",color1:"#C5FFA9",color2:"#B0DFFF",color3:"#F6FFB7"})
     
   return (
   <View > 
