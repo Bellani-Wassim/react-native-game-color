@@ -55,6 +55,7 @@ export default  App = () => {
 
   
   const Play = () => {
+    console.log('render')
     const [color, setColor] = useState({color0:"red",color1:"green",color2:"blue",color3:"yellow"})
     const [level, setLevel] = useState(1)
     const [time, setTime] = useState(0)
