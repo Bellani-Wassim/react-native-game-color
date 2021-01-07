@@ -55,18 +55,23 @@ export default  App = () => {
 
   
   const Play = () => {
-    console.log('render')
     const [color, setColor] = useState({color0:"red",color1:"green",color2:"blue",color3:"yellow"})
     const [level, setLevel] = useState(1)
-    const [time, setTime] = useState(0)
-    const [tompo, setTompo] = useState(0)
     const [list, setList] = useState([])
     const [resetButton, setResetButton] = useState(false)
     
+    useEffect(() => {
+      let t =0
+      for (let i = 0; i < list.length; i++) {
+        t = t + 500
+        setTimeout(() => {colorDisplay(list[i])}, t)
+        t = t + 300
+        setTimeout(() => {unClearColor()}, t)
+      }
+    }, [list])
+
     const addNewColor=()=> {
-        setList(list =>[ ...list, Math.floor(Math.random() * 4)])
-        console.log('taille list dans le add random = '+list.length)
-        console.log('lelement numero 1: '+list[0])
+        setList(list =>[...list, Math.floor(Math.random() * 4)])
           return 0
       }
 
@@ -75,7 +80,7 @@ export default  App = () => {
     }
 
     const unClearColor = () => {
-      setColor({color0:"#FFBDBD",color1:"#C5FFA9",color2:"#B0DFFF",color3:"#F6FFB7"})
+      setColor({color0:"#FFE2E2",color1:"#C5FFA9",color2:"#B0DFFF",color3:"#F9FAED"})
     }
 
     const Reset = () => {
@@ -92,29 +97,17 @@ export default  App = () => {
 
     const colorDisplay = (num=4) => {
               switch (num) {
-        case 0:setColor({color0:"red",color1:"#C5FFA9",color2:"#B0DFFF",color3:"#F6FFB7"});break;
-        case 1:setColor({color0:"#FFBDBD",color1:"green",color2:"#B0DFFF",color3:"#F6FFB7"});break;
-        case 2:setColor({color0:"#FFBDBD",color1:"#C5FFA9",color2:"blue",color3:"#F6FFB7"});break;
-        case 3:setColor({color0:"#FFBDBD",color1:"#C5FFA9",color2:"#B0DFFF",color3:"yellow"});break;
+        case 0:setColor({color0:"red",color1:"#C5FFA9",color2:"#B0DFFF",color3:"#F9FAED"});break;
+        case 1:setColor({color0:"#FFE2E2",color1:"green",color2:"#B0DFFF",color3:"#F9FAED"});break;
+        case 2:setColor({color0:"#FFE2E2",color1:"#C5FFA9",color2:"blue",color3:"#F9FAED"});break;
+        case 3:setColor({color0:"#FFE2E2",color1:"#C5FFA9",color2:"#B0DFFF",color3:"yellow"});break;
         default:console.log("default");break;}
     }
 
-    const handleClickStart = () => {
+    const useHandleClickStart = () => {
       setResetButton(true)
       unClearColor()
       addNewColor()
-      colorDisplay(list[0])
-      console.log('taille list apres 1 er add random = '+list.length)
-      // useEffect(() => {
-      //   for (let i = 0; i < list.length; i++) { 
-      //     console.log('lelement numero'+i+': '+list[i])
-      //     // setTime(t => t + 500) 
-      //     setTimeout(() => {colorDisplay(list[i])}, 500)
-      //     // setTime(t => t + 140)
-      //     setTimeout(() => {unClearColor()}, 750)
-      //   }
-      // }, [])
-
     }
     
   return (
@@ -124,7 +117,7 @@ export default  App = () => {
             <TouchableOpacity style={{flex:1,width:"20%",backgroundColor:"#092BC6",borderRadius: 40,height:"45%"}} onPress={handleClickReturn}>
               <Text style={[styles.textButton,{fontSize: 18}]}>return</Text>
             </TouchableOpacity>
-           <TouchableOpacity style={{flex:1,width:"20%",backgroundColor:"#092BC6",borderRadius: 40,height:"45%"}} onPress={handleClickStart}>
+           <TouchableOpacity style={{flex:1,width:"20%",backgroundColor:"#092BC6",borderRadius: 40,height:"45%"}} onPress={useHandleClickStart}>
               <Text style={[styles.textButton,{fontSize: 18}]}>start level {level}</Text>
           </TouchableOpacity>
             </View> 
