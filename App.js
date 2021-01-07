@@ -20,16 +20,6 @@ export default  App = () => {
     setShowHowTP(false)
   }
 
-  const randomColorAdd = () => {
- 
-  }
-
-  const handleClickColor = () => {
-
-  }
-
-
-
   const Separator = () => (
     <View style={styles.separator} />
   );
@@ -53,11 +43,12 @@ export default  App = () => {
       );
   }
 
-  
   const Play = () => {
     const [color, setColor] = useState({color0:"red",color1:"green",color2:"blue",color3:"yellow"})
     const [level, setLevel] = useState(1)
     const [list, setList] = useState([])
+    const [selectedList, setSelectedList] = useState([])
+    const [correctAnswer, setCorrectAnswer]
     const [resetButton, setResetButton] = useState(false)
     
     useEffect(() => {
@@ -70,9 +61,20 @@ export default  App = () => {
       }
     }, [list])
 
-    const addNewColor=()=> {
+    useEffect(() => {
+      if ((selectedList[selectedList.length-1]==list[selectedList.length-1])&&(selectedList.length>0)) {
+        
+      }
+    }, [selectedList.length])
+
+    const addNewRandomColor=()=> {
         setList(list =>[...list, Math.floor(Math.random() * 4)])
           return 0
+      }
+
+    const addSelectedColor=(num)=> {
+        
+        return 0
       }
 
     const defaultColor = () => {
@@ -107,8 +109,12 @@ export default  App = () => {
     const useHandleClickStart = () => {
       setResetButton(true)
       unClearColor()
-      addNewColor()
+      addNewRandomColor()
     }
+
+   useEffect(() => {
+     
+   }, [input])
     
   return (
   <View > 
@@ -122,8 +128,8 @@ export default  App = () => {
           </TouchableOpacity>
             </View> 
             <View style={{flex:3}}>
-              <TouchableOpacity  style={{flex:1,flexDirection:'row'}}><TouchableOpacity  style={{flex:1,backgroundColor: color.color0}} onPress={() =>colorSelected(0)}></TouchableOpacity ><TouchableOpacity  style={{flex:1,backgroundColor: color.color1}} onPress={() =>colorSelected(1)}></TouchableOpacity ></TouchableOpacity >
-              <TouchableOpacity  style={{flex:1,flexDirection:'row'}}><TouchableOpacity  style={{flex:1,backgroundColor: color.color2}} onPress={() =>colorSelected(2)}></TouchableOpacity ><TouchableOpacity  style={{flex:1,backgroundColor: color.color3}} onPress={() =>colorSelected(3)}></TouchableOpacity></TouchableOpacity >
+              <TouchableOpacity  style={{flex:1,flexDirection:'row'}}><TouchableOpacity  style={{flex:1,backgroundColor: color.color0}} onPress={addSelectedColor(0)}></TouchableOpacity ><TouchableOpacity  style={{flex:1,backgroundColor: color.color1}} onPress={addSelectedColor(1)}></TouchableOpacity ></TouchableOpacity >
+              <TouchableOpacity  style={{flex:1,flexDirection:'row'}}><TouchableOpacity  style={{flex:1,backgroundColor: color.color2}} onPress={addSelectedColor(2)}></TouchableOpacity ><TouchableOpacity  style={{flex:1,backgroundColor: color.color3}} onPress={addSelectedColor(3)}></TouchableOpacity></TouchableOpacity >
             </View>
             <View style={{flex:1.5}}>
             <Reset />
