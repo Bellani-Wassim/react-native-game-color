@@ -48,7 +48,8 @@ export default  App = () => {
     const [level, setLevel] = useState(1)
     const [list, setList] = useState([])
     const [selectedList, setSelectedList] = useState([])
-    const [correctAnswer, setCorrectAnswer]
+    const [correctAnswer, setCorrectAnswer] = useState(true)
+    const [nextLevel, setNextLevel] = useState(true)
     const [resetButton, setResetButton] = useState(false)
     
     useEffect(() => {
@@ -61,11 +62,30 @@ export default  App = () => {
       }
     }, [list])
 
+
     useEffect(() => {
-      if ((selectedList[selectedList.length-1]==list[selectedList.length-1])&&(selectedList.length>0)) {
-        
+      let tompo = true
+      if(selectedList.length==list.length){
+        console.log("dans la condition")
+        for (let i = 0; i < list.length; i++) {
+          console.log("valuer numero "+i+"= "+list[i])
+          console.log("valuer select "+i+"= "+selectedList[i])
+           if (selectedList[i] != list[i]) { 
+               tompo=false   
+               console.log("faux2")
+               setSelectedList([])
+            }           
+        }       
+        setNextLevel(tompo)
       }
     }, [selectedList.length])
+
+    useEffect(() => {
+      console.log("next level = "+nextLevel)
+      if(nextLevel){
+        setSelectedList([])
+        }
+    }, [nextLevel])
 
     const addNewRandomColor=()=> {
         setList(list =>[...list, Math.floor(Math.random() * 4)])
@@ -73,7 +93,7 @@ export default  App = () => {
       }
 
     const addSelectedColor=(num)=> {
-        
+      setSelectedList(selectedList =>[...selectedList, num])
         return 0
       }
 
@@ -87,18 +107,19 @@ export default  App = () => {
 
     const Reset = () => {
       if (resetButton){ return (
-        <TouchableOpacity style={{width:"20%",backgroundColor:"red",borderRadius: 40,left:"2%",top:"2%",height:"45%",top:"5%"}} >
+        <TouchableOpacity style={{width:"20%",backgroundColor:"red",borderRadius: 40,left:"2%",top:"2%",height:"45%",top:"5%"}} onPress={handleClickReset}>
         <Text style={[styles.textButton,{fontSize: 18}]}>reset</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> 
       )}else{return (<View></View>)}
     }
 
     const handleClickReset = () => {
+      setNextLevel(true)
       setLevel(1)
     }  
 
     const colorDisplay = (num=4) => {
-              switch (num) {
+        switch (num) {
         case 0:setColor({color0:"red",color1:"#C5FFA9",color2:"#B0DFFF",color3:"#F9FAED"});break;
         case 1:setColor({color0:"#FFE2E2",color1:"green",color2:"#B0DFFF",color3:"#F9FAED"});break;
         case 2:setColor({color0:"#FFE2E2",color1:"#C5FFA9",color2:"blue",color3:"#F9FAED"});break;
@@ -107,14 +128,17 @@ export default  App = () => {
     }
 
     const useHandleClickStart = () => {
+      setNextLevel(false)
       setResetButton(true)
       unClearColor()
       addNewRandomColor()
+
     }
 
-   useEffect(() => {
-     
-   }, [input])
+   const ButtonNextLevel = () => {
+    if (nextLevel){ return (
+    <Text style={[styles.textButton,{fontSize: 18}]}>start level {level}</Text>)}else{return (<Text style={[styles.textButton,{fontSize: 18}]}>restart level {level}</Text>)}
+    }
     
   return (
   <View > 
@@ -124,12 +148,12 @@ export default  App = () => {
               <Text style={[styles.textButton,{fontSize: 18}]}>return</Text>
             </TouchableOpacity>
            <TouchableOpacity style={{flex:1,width:"20%",backgroundColor:"#092BC6",borderRadius: 40,height:"45%"}} onPress={useHandleClickStart}>
-              <Text style={[styles.textButton,{fontSize: 18}]}>start level {level}</Text>
+              <ButtonNextLevel />
           </TouchableOpacity>
             </View> 
             <View style={{flex:3}}>
-              <TouchableOpacity  style={{flex:1,flexDirection:'row'}}><TouchableOpacity  style={{flex:1,backgroundColor: color.color0}} onPress={addSelectedColor(0)}></TouchableOpacity ><TouchableOpacity  style={{flex:1,backgroundColor: color.color1}} onPress={addSelectedColor(1)}></TouchableOpacity ></TouchableOpacity >
-              <TouchableOpacity  style={{flex:1,flexDirection:'row'}}><TouchableOpacity  style={{flex:1,backgroundColor: color.color2}} onPress={addSelectedColor(2)}></TouchableOpacity ><TouchableOpacity  style={{flex:1,backgroundColor: color.color3}} onPress={addSelectedColor(3)}></TouchableOpacity></TouchableOpacity >
+              <TouchableOpacity  style={{flex:1,flexDirection:'row'}}><TouchableOpacity  style={{flex:1,backgroundColor: color.color0}} onPress={() => addSelectedColor(0)}></TouchableOpacity ><TouchableOpacity  style={{flex:1,backgroundColor: color.color1}} onPress={() => addSelectedColor(1)}></TouchableOpacity ></TouchableOpacity >
+              <TouchableOpacity  style={{flex:1,flexDirection:'row'}}><TouchableOpacity  style={{flex:1,backgroundColor: color.color2}} onPress={() => addSelectedColor(2)}></TouchableOpacity ><TouchableOpacity  style={{flex:1,backgroundColor: color.color3}} onPress={() => addSelectedColor(3)}></TouchableOpacity></TouchableOpacity >
             </View>
             <View style={{flex:1.5}}>
             <Reset />
