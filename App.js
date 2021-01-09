@@ -1,5 +1,5 @@
 import React, { useState , useEffect} from 'react';
-import { TouchableOpacity, ImageBackground ,StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity, ImageBackground ,StyleSheet,Image, Text, View } from 'react-native';
 
 export default  App = () => {
   const [showHomeScreen, setShowHomeScreen] = useState(true)
@@ -45,12 +45,29 @@ export default  App = () => {
 
   const Play = () => {
     const [color, setColor] = useState({color0:"red",color1:"green",color2:"blue",color3:"yellow"})
-    const [level, setLevel] = useState(1)
+    const [level, setLevel] = useState(0)
     const [list, setList] = useState([])
+    const [image, setImage] = useState("./assets/dumb/1.jpg")
     const [selectedList, setSelectedList] = useState([])
-    const [correctAnswer, setCorrectAnswer] = useState(true)
+    const [restart, setRestart] = useState(false)
     const [nextLevel, setNextLevel] = useState(true)
     const [resetButton, setResetButton] = useState(false)
+
+    let imgPath = [
+      require("./assets/dumb/0.jpg"),
+      require("./assets/dumb/1.jpg"),
+      require("./assets/dumb/2.jpg"),
+      require("./assets/dumb/3.jpg"),
+      require("./assets/dumb/4.jpg"),
+      require("./assets/dumb/5.jpg"),
+      require("./assets/dumb/6.jpg"),
+      require("./assets/dumb/7.jpg"),
+      require("./assets/dumb/8.jpg"),
+      require("./assets/dumb/9.jpg"),
+      require("./assets/dumb/10.jpg"),
+      require("./assets/dumb/11.jpg"),
+      require("./assets/dumb/12.jpg"),
+    ]
     
     useEffect(() => {
       let t =0
@@ -62,30 +79,31 @@ export default  App = () => {
       }
     }, [list])
 
-
     useEffect(() => {
-      let tompo = true
-      if(selectedList.length==list.length){
-        console.log("dans la condition")
+      if((selectedList.length==list.length)){
+        let tompo = true
         for (let i = 0; i < list.length; i++) {
-          console.log("valuer numero "+i+"= "+list[i])
-          console.log("valuer select "+i+"= "+selectedList[i])
            if (selectedList[i] != list[i]) { 
                tompo=false   
-               console.log("faux2")
                setSelectedList([])
+               setRestart(true)
             }           
         }       
         setNextLevel(tompo)
+        if(tompo){
+          setLevel(l => l+=1)
+          setRestart(false)}
       }
     }, [selectedList.length])
 
     useEffect(() => {
-      console.log("next level = "+nextLevel)
-      if(nextLevel){
         setSelectedList([])
-        }
     }, [nextLevel])
+
+    useEffect(() => {
+      if (level<12) {setImage(imgPath[level])}
+      else{setImage(12)}
+    }, [level])
 
     const addNewRandomColor=()=> {
         setList(list =>[...list, Math.floor(Math.random() * 4)])
@@ -115,6 +133,9 @@ export default  App = () => {
 
     const handleClickReset = () => {
       setNextLevel(true)
+      setSelectedList([])
+      setList([])
+      setRestart(false) 
       setLevel(1)
     }  
 
@@ -128,16 +149,21 @@ export default  App = () => {
     }
 
     const useHandleClickStart = () => {
+      if(nextLevel){addNewRandomColor()}
+      else{setList(list=>[...list])}
       setNextLevel(false)
       setResetButton(true)
       unClearColor()
-      addNewRandomColor()
-
     }
+
+    const Wojaks = () => {
+      if(resetButton){
+        return(<Image style={{resizeMode:"repeat"}} source={image} />)
+    }else{return (<View></View>)}}
 
    const ButtonNextLevel = () => {
     if (nextLevel){ return (
-    <Text style={[styles.textButton,{fontSize: 18}]}>start level {level}</Text>)}else{return (<Text style={[styles.textButton,{fontSize: 18}]}>restart level {level}</Text>)}
+    <Text style={[styles.textButton,{fontSize: 18}]}>next level {level}</Text>)}else{return (<Text style={[styles.textButton,{fontSize: 18}]}>restart</Text>)}
     }
     
   return (
@@ -155,8 +181,9 @@ export default  App = () => {
               <TouchableOpacity  style={{flex:1,flexDirection:'row'}}><TouchableOpacity  style={{flex:1,backgroundColor: color.color0}} onPress={() => addSelectedColor(0)}></TouchableOpacity ><TouchableOpacity  style={{flex:1,backgroundColor: color.color1}} onPress={() => addSelectedColor(1)}></TouchableOpacity ></TouchableOpacity >
               <TouchableOpacity  style={{flex:1,flexDirection:'row'}}><TouchableOpacity  style={{flex:1,backgroundColor: color.color2}} onPress={() => addSelectedColor(2)}></TouchableOpacity ><TouchableOpacity  style={{flex:1,backgroundColor: color.color3}} onPress={() => addSelectedColor(3)}></TouchableOpacity></TouchableOpacity >
             </View>
-            <View style={{flex:1.5}}>
-            <Reset />
+            <View style={{flex:1.5,flexDirection:'row'}}>
+            <Reset style={{flex:1}}/>
+            <Wojaks style={{flex:1.5}}/>
             </View>
             </ImageBackground>
   </View>
