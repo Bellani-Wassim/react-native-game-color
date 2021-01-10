@@ -1,7 +1,7 @@
 import React, { useState , useEffect} from 'react';
 import { TouchableOpacity, ImageBackground ,StyleSheet,Image, Text, View } from 'react-native';
 
-export default  App = () => {
+export default function App() {
   const [showHomeScreen, setShowHomeScreen] = useState(true)
   const [showHowTP, setShowHowTP] = useState(false) 
   const [showPlay, setShowPlay] = useState(false)
@@ -45,16 +45,16 @@ export default  App = () => {
 
   const Play = () => {
     const [color, setColor] = useState({color0:"red",color1:"green",color2:"blue",color3:"yellow"})
-    const [level, setLevel] = useState(0)
+    const [level, setLevel] = useState(1)
     const [list, setList] = useState([])
-    const [image, setImage] = useState("./assets/dumb/1.jpg")
+    const [image, setImage] = useState(require("./assets/dumb/1.jpg"),)
     const [selectedList, setSelectedList] = useState([])
     const [passNextLvl,setPassNextLvl] = useState(2)
     const [nextLevel, setNextLevel] = useState(true)
     const [resetButton, setResetButton] = useState(false)
 
     let imgPath = [
-      require("./assets/dumb/0.jpg"),
+      require("./assets/dumb/1.jpg"),
       require("./assets/dumb/1.jpg"),
       require("./assets/dumb/2.jpg"),
       require("./assets/dumb/3.jpg"),
@@ -91,14 +91,14 @@ export default  App = () => {
       require("./assets/screen.png")
     ]
 
-    useEffect(() => {
+    useEffect(() => {if(!nextLevel){
       let t =0
       for (let i = 0; i < list.length; i++) {
         t = t + 500
         setTimeout(() => {colorDisplay(list[i])}, t)
         t = t + 300
         setTimeout(() => {unClearColor()}, t)
-      }
+      }}
     }, [list])
 
     useEffect(() => {
@@ -108,7 +108,16 @@ export default  App = () => {
     }, [passNextLvl])
 
     useEffect(() => {
-      if((selectedList.length==list.length)){
+      if(passNextLvl==1){
+        setList([])
+        for (let i = 0; i < (level); i++) {
+          addNewRandomColor()
+        }
+      }
+    }, [passNextLvl])
+
+    useEffect(() => {
+      if((selectedList.length==list.length)&&(!list.length==0)){
         let tompo = true
         for (let i = 0; i < list.length; i++) {
            if (selectedList[i] != list[i]) { 
