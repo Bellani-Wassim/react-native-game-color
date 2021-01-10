@@ -49,7 +49,7 @@ export default  App = () => {
     const [list, setList] = useState([])
     const [image, setImage] = useState("./assets/dumb/1.jpg")
     const [selectedList, setSelectedList] = useState([])
-    const [restart, setRestart] = useState(false)
+    const [passNextLvl,setPassNextLvl] = useState(2)
     const [nextLevel, setNextLevel] = useState(true)
     const [resetButton, setResetButton] = useState(false)
 
@@ -67,8 +67,30 @@ export default  App = () => {
       require("./assets/dumb/10.jpg"),
       require("./assets/dumb/11.jpg"),
       require("./assets/dumb/12.jpg"),
+      require("./assets/dumb/13.jpg"),
+      require("./assets/dumb/14.jpg")
+    ]
+
+    let loserImage = [
+      require("./assets/loser/0.png"),
+      require("./assets/loser/1.png"),
+      require("./assets/loser/2.png"),
+      require("./assets/loser/3.png"),
+      require("./assets/loser/4.png"),
+      require("./assets/loser/5.png"),
+      require("./assets/loser/6.png"),
+      require("./assets/loser/7.png"),
+      require("./assets/loser/8.png"),
+      require("./assets/loser/9.png"),
+      require("./assets/loser/10.png")
     ]
     
+    let trueFalse = [
+      require("./assets/false.png"),
+      require("./assets/correct.png"),
+      require("./assets/screen.png")
+    ]
+
     useEffect(() => {
       let t =0
       for (let i = 0; i < list.length; i++) {
@@ -80,19 +102,24 @@ export default  App = () => {
     }, [list])
 
     useEffect(() => {
+      if (passNextLvl==0) {
+        setSelectedList([])
+      }
+    }, [passNextLvl])
+
+    useEffect(() => {
       if((selectedList.length==list.length)){
         let tompo = true
         for (let i = 0; i < list.length; i++) {
            if (selectedList[i] != list[i]) { 
-               tompo=false   
-               setSelectedList([])
-               setRestart(true)
+               tompo=false 
+               setPassNextLvl(0)
             }           
         }       
         setNextLevel(tompo)
         if(tompo){
           setLevel(l => l+=1)
-          setRestart(false)}
+          setPassNextLvl(1)}
       }
     }, [selectedList.length])
 
@@ -101,9 +128,13 @@ export default  App = () => {
     }, [nextLevel])
 
     useEffect(() => {
-      if (level<12) {setImage(imgPath[level])}
-      else{setImage(12)}
-    }, [level])
+      if ((nextLevel)&&(passNextLvl==1)){
+        if (level<14) {setImage(imgPath[level])}
+      else{setImage(imgPath[14])}
+      }else{
+        if(passNextLvl==0){
+            setImage(loserImage[Math.floor(Math.random() * 11)])}}
+    }, [level,nextLevel,passNextLvl])
 
     const addNewRandomColor=()=> {
         setList(list =>[...list, Math.floor(Math.random() * 4)])
@@ -125,18 +156,20 @@ export default  App = () => {
 
     const Reset = () => {
       if (resetButton){ return (
-        <TouchableOpacity style={{width:"20%",backgroundColor:"red",borderRadius: 40,left:"2%",top:"2%",height:"45%",top:"5%"}} onPress={handleClickReset}>
+        <TouchableOpacity style={{width:"75%",backgroundColor:"red",borderRadius: 40,left:"2%",height:"45%",top:"5%"}} onPress={handleClickReset}>
         <Text style={[styles.textButton,{fontSize: 18}]}>reset</Text>
         </TouchableOpacity> 
-      )}else{return (<View></View>)}
+      )}else{return (<Text style={{color : 'white',left:"4%"}}>level 0 !{"\n"}this is you :({"\n"}finish level 1{"\n"}and your picture{"\n"}will upgrade</Text>)}
     }
 
     const handleClickReset = () => {
+      setImage(imgPath[1])
       setNextLevel(true)
       setSelectedList([])
       setList([])
-      setRestart(false) 
       setLevel(1)
+      setPassNextLvl(2)
+      defaultColor()
     }  
 
     const colorDisplay = (num=4) => {
@@ -144,46 +177,53 @@ export default  App = () => {
         case 0:setColor({color0:"red",color1:"#C5FFA9",color2:"#B0DFFF",color3:"#F9FAED"});break;
         case 1:setColor({color0:"#FFE2E2",color1:"green",color2:"#B0DFFF",color3:"#F9FAED"});break;
         case 2:setColor({color0:"#FFE2E2",color1:"#C5FFA9",color2:"blue",color3:"#F9FAED"});break;
-        case 3:setColor({color0:"#FFE2E2",color1:"#C5FFA9",color2:"#B0DFFF",color3:"yellow"});break;
+        case 3:setColor({color0:"#FFE2E2",color1:"#C5FFA9",color2:"#B0DFFF",color3:"#FBF700"});break;
         default:console.log("default");break;}
     }
 
     const useHandleClickStart = () => {
       if(nextLevel){addNewRandomColor()}
-      else{setList(list=>[...list])}
+      else{setList(list=>[...list])
+      setSelectedList([])}
       setNextLevel(false)
       setResetButton(true)
       unClearColor()
+      setPassNextLvl(2)
+    }
+
+    const TrueFalse = () => {
+        return(<Image source={trueFalse[passNextLvl].toString()} style={{width: '100%',height: '100%',right:"5%",aspectRatio: 1}}  />)
     }
 
     const Wojaks = () => {
-      if(resetButton){
-        return(<Image style={{resizeMode:"repeat"}} source={image} />)
-    }else{return (<View></View>)}}
+        return(<Image source={image.toString()} style={{width: '100%',height: '100%',right:"5%",aspectRatio: 1}}/>)}
 
    const ButtonNextLevel = () => {
     if (nextLevel){ return (
-    <Text style={[styles.textButton,{fontSize: 18}]}>next level {level}</Text>)}else{return (<Text style={[styles.textButton,{fontSize: 18}]}>restart</Text>)}
+    <Text style={[styles.textButton,{fontSize: 18}]}>start level {level}</Text>)}else{return (<Text style={[styles.textButton,{fontSize: 18}]}>restart</Text>)}
     }
     
   return (
   <View > 
     <ImageBackground style={{width:"100%",height:"100%"}} source={require("./assets/screen.png")} >
-            <View style={{flex:1.5,flexDirection:'row',top:"8%"}}>
+            <View style={{flex:1,flexDirection:'row',top:"8%"}}>
+
             <TouchableOpacity style={{flex:1,width:"20%",backgroundColor:"#092BC6",borderRadius: 40,height:"45%"}} onPress={handleClickReturn}>
               <Text style={[styles.textButton,{fontSize: 18}]}>return</Text>
             </TouchableOpacity>
-           <TouchableOpacity style={{flex:1,width:"20%",backgroundColor:"#092BC6",borderRadius: 40,height:"45%"}} onPress={useHandleClickStart}>
+            <View style={{flex:0.5,justifyContent: 'center',alignItems: 'center',width:"20%",height:"45%"}}><TrueFalse /></View>
+            <TouchableOpacity style={{flex:1,width:"20%",backgroundColor:"#092BC6",borderRadius: 40,height:"45%"}} onPress={useHandleClickStart}>
               <ButtonNextLevel />
-          </TouchableOpacity>
-            </View> 
+            </TouchableOpacity>
+            </View>
+            
             <View style={{flex:3}}>
               <TouchableOpacity  style={{flex:1,flexDirection:'row'}}><TouchableOpacity  style={{flex:1,backgroundColor: color.color0}} onPress={() => addSelectedColor(0)}></TouchableOpacity ><TouchableOpacity  style={{flex:1,backgroundColor: color.color1}} onPress={() => addSelectedColor(1)}></TouchableOpacity ></TouchableOpacity >
               <TouchableOpacity  style={{flex:1,flexDirection:'row'}}><TouchableOpacity  style={{flex:1,backgroundColor: color.color2}} onPress={() => addSelectedColor(2)}></TouchableOpacity ><TouchableOpacity  style={{flex:1,backgroundColor: color.color3}} onPress={() => addSelectedColor(3)}></TouchableOpacity></TouchableOpacity >
             </View>
             <View style={{flex:1.5,flexDirection:'row'}}>
-            <Reset style={{flex:1}}/>
-            <Wojaks style={{flex:1.5}}/>
+            <View style={{flex:0.5}}><Reset /></View>
+            <View style={{flex:0.75}}><Wojaks /></View>
             </View>
             </ImageBackground>
   </View>
