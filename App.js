@@ -1,5 +1,5 @@
 import React, { useState , useEffect} from 'react';
-import { TouchableOpacity, ImageBackground ,StyleSheet,Image, Text, View } from 'react-native';
+import { TouchableOpacity, ImageBackground ,StyleSheet,Image, Text, View, SafeAreaView, Platform,StatusBar } from 'react-native';
 
 export default function App() {
   const [showHomeScreen, setShowHomeScreen] = useState(true)
@@ -26,7 +26,7 @@ export default function App() {
   
   const HomeScreen = () => {
     return (
-        <View >
+        <SafeAreaView >
           <ImageBackground style={{width:"100%",height:"100%"}} source={require("./assets/homeScreen.png")} >
             <View style={styles.buttonsView}>
             <TouchableOpacity style={styles.buttons} onPress={handleClickPlay}>
@@ -39,7 +39,7 @@ export default function App() {
                    <Separator />
             </View>
           </ImageBackground>
-        </View>
+        </SafeAreaView>
       );
   }
 
@@ -82,7 +82,8 @@ export default function App() {
       require("./assets/loser/7.png"),
       require("./assets/loser/8.png"),
       require("./assets/loser/9.png"),
-      require("./assets/loser/10.png")
+      require("./assets/loser/10.png"),
+      require("./assets/loser/11.png")
     ]
     
     let trueFalse = [
@@ -142,7 +143,7 @@ export default function App() {
       else{setImage(imgPath[14])}
       }else{
         if(passNextLvl==0){
-            setImage(loserImage[Math.floor(Math.random() * 11)])}}
+            setImage(loserImage[Math.floor(Math.random() * 12)])}}
     }, [level,nextLevel,passNextLvl])
 
     const addNewRandomColor=()=> {
@@ -205,7 +206,8 @@ export default function App() {
     }
 
     const Wojaks = () => {
-        return(<Image source={image.toString()} style={{width: '100%',height: '100%',right:"5%",aspectRatio: 1}}/>)}
+      return(<Image source={image.toString()} style={{width: '100%',height: '100%',right:"0%",aspectRatio: 1}}/>)
+    }
 
    const ButtonNextLevel = () => {
     if (nextLevel){ return (
@@ -213,7 +215,7 @@ export default function App() {
     }
     
   return (
-  <View > 
+  <SafeAreaView > 
     <ImageBackground style={{width:"100%",height:"100%"}} source={require("./assets/screen.png")} >
             <View style={{flex:1,flexDirection:'row',top:"8%"}}>
 
@@ -235,7 +237,7 @@ export default function App() {
             <View style={{flex:0.75}}><Wojaks /></View>
             </View>
             </ImageBackground>
-  </View>
+  </SafeAreaView>
   )
   }
   
@@ -251,7 +253,7 @@ export default function App() {
             <View style={{flex:4}}>
               <Text style={[styles.textButton,{top:"20%"}]}>you have to follow the collor's order.  for exemple : if the first color to show up is blue
               the second is green and the third is red .you just have to click on the blue box after that the
-              green box and the red one.
+              green box and the red one.{"\n"}
               good luck !</Text>
             </View>
           </ImageBackground>
